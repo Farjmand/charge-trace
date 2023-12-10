@@ -1,12 +1,12 @@
-import Dashboard from './components/dashboard'
+
 import './App.css'
+import SignIn from './components/signIn'
 
 function App() {
- 
 
   return (
     <>
-   <Dashboard />
+<SignIn />
     </>
   )
 }
