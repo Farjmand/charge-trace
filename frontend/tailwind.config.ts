@@ -4,6 +4,7 @@ const config: Config = {
   theme: {
     colors:{
       'pink': '#9F3B8B',
+      'purple': '#A162F7'
     },
     extend: {},
   },

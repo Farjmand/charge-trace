@@ -9,4 +9,6 @@ urlpatterns = [
     path('users/', UsersList.as_view(), name='users'),
     path('users/register', UserRegistrationAPIView.as_view(), name='user-register'),
     path('users/login', UserLoginAPIView.as_view(), name='user-login'),
+    path('users/logout', UserLogoutAPIView.as_view(), name='user-logout'),
+    path('users/vehicle_list', UserVehiclesView.as_view(), name='UserVehiclesView'),
 ]

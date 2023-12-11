@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-64yn)hkwt!xpdo0s*#fkleya@v!fkm5kt0q-5pj+9t0uwo%=1j
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_swagger',
-    'drf_yasg'
+    'drf_yasg',
+    'corsheaders',
    
 ]
 
@@ -53,9 +54,17 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'charge_apis.urls'
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True  # Add this line
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Add your frontend URL here
+    "http://127.0.0.1:3000",  # Add your frontend URL here
+]  # Add this line
 
 TEMPLATES = [
     {
@@ -75,7 +84,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'charge_apis.wsgi.application'
 
+REST_FRAMEWORK = {
+     'DEFAULT_AUTHENTICATION_CLASSES': (
+         'rest_framework.authentication.TokenAuthentication',  
+         'rest_framework.authentication.SessionAuthentication',
+     ),
 
+ }
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
