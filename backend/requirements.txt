@@ -1,5 +1,5 @@
 # Add your project dependencies here
 django==5.0
 rest_framework==3.12.4
-drf-yasg
-django-rest-swagger
+drf-yasg==1.17.1
+django-rest-swagger==2.2.0
