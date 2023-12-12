@@ -1,19 +1,20 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import axios from "../utils/axios";
+import { useNavigate, Link } from "react-router-dom";
+import { useToken } from '../utils/auth';
 
 const SignIn: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { saveToken } = useToken();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      const url = "http://127.0.0.1:8000/api";
-      const response = await axios.post(`${url}/users/login`, {
+     
+      const response = await axios.post('/users/login', {
         username,
         password,
       });
@@ -21,7 +22,7 @@ const SignIn: React.FC = () => {
       if (response.status === 200) {
         const token = response.data.token;
         console.log(`token ${response.data.token}`);
-        localStorage.setItem("token", token);
+        saveToken(token);
         navigate("/");
       } else {
         console.error(response.data.error);
@@ -36,14 +37,18 @@ const SignIn: React.FC = () => {
   return (
     <div>
       <div className="justify-center items-center bg-white flex flex-col px-20 py-12 max-md:px-5">
+      {error && (
+          <div className="text-red-500 mt-4">{error}</div>
+        )}
         <form onSubmit={handleSubmit}>
           <div className="text-zinc-800 text-3xl font-bold whitespace-nowrap mt-28 max-md:mt-10">
             Sign In
           </div>
           <div className="text-purple-500 text-lg font-medium leading-7 whitespace-nowrap mt-4">
             <span className=" text-gray-500">Don’t have an account?</span>
-            
-            <span className="font-medium text-purple">Sign up for one</span>
+            <Link to="/register" className="btn btn-primary">
+            <span className="font-medium text-purple"> Sign up for one</span>
+            </Link>
           </div>
 
           <div className="items-stretch border border-[color:var(--6,#F4F5F6)] shadow-2xl bg-white flex w-[506px] max-w-full flex-col mt-10 pl-5 pr-10 py-5 rounded-xl border-solid max-md:pr-5">

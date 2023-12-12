@@ -1,34 +1,28 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+} from "react-router-dom";
+import SignIn from "./components/SignIn";
+import Register from "./components/Register";
+import Dashboard from "./components/Dashboard";
+import AddVehicle from "./components/AddVehicles";
+
 import "./App.css";
-import Dashboard from "./components/dashboard";
-import Register from "./components/register";
-import SignIn from "./components/signIn";
-import { useState, useEffect } from "react";
+
+
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setAuthenticated(true);
-    }
-  }, []);
-
+ 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
+        <Route path="/login" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/signin" element={<SignIn />} />
-        {authenticated ? (
-          
-          <Route path="/" element={<Dashboard token={localStorage.getItem("token") || ""} />} />
-          
-        ) : (
-          <Route path="/" element={<Navigate to="/signin" replace />} />
-        )}
-      </Routes>
-    </BrowserRouter>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/addVehicle" element={<AddVehicle />} />
+    </Routes>
+    </Router>
   );
 }
 

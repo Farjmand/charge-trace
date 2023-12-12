@@ -1,24 +1,32 @@
 import React, { useState } from "react";
-import axios from "axios";
+import axios from "../utils/axios";
+import { useNavigate, Link } from "react-router-dom";
+import { useToken } from '../utils/auth';
 
 const Register: React.FC = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { saveToken } = useToken();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const url = "http://127.0.0.1:8000/api";
-      const response = await axios.post(`${url}/users/register`, {
+     
+      const response = await axios.post('/users/register', {
         username,
         email,
         password,
       });
       if (response.status === 201) {
         console.log("User created successfully");
+        const token = response.data.token;
+        console.log(`token ${response.data.token}`);
+        saveToken(token);
+        navigate("/");
       } else {
         console.error(response.data.error);
         setError(response.data.error);
@@ -41,8 +49,9 @@ const Register: React.FC = () => {
     <div className="text-purple-500 text-lg font-medium leading-7 whitespace-nowrap mt-4">
       <span className=" text-gray-500">Don’t have an account?</span>
       <span className="font-medium text-zinc-700"> </span>
-      
+      <Link to="/signin" className="btn btn-primary">
       <span className="font-medium text-purple">Sign in</span>
+      </Link>
     </div>
     
     <div className="items-stretch border border-[color:var(--6,#F4F5F6)] shadow-2xl bg-white flex w-[506px] max-w-full flex-col mt-10 pl-5 pr-10 py-5 rounded-xl border-solid max-md:pr-5">
