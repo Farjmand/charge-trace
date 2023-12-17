@@ -30,7 +30,9 @@ const SideNavBar: React.FC = () => {
                 <ListItemPrefix>
                   <PresentationChartBarIcon className="h-5 w-5" />
                 </ListItemPrefix>
+                <Link to="/">
                 Dashboard
+                </Link>
               </ListItem>
               <ListItem>
                 <ListItemPrefix>

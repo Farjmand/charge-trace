@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from "react";
 import axios from "../utils/axios";
 import SideNavBar from "./SideNavBar";
+import { getStoredToken } from "../utils/auth";
 
 const AddVehicle: React.FC = () => {
   const electricVehicleCompanies = [
@@ -65,10 +66,13 @@ const AddVehicle: React.FC = () => {
     },
   ];
   const [vehicleData, setVehicleData] = useState({
-    make: "",
+    company: "",
     model: "",
     year: "",
+    charging_start_time: "",
+    charging_end_time: "",
   });
+
 
   const handleInputChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -80,9 +84,18 @@ const AddVehicle: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const token = getStoredToken();
+    const csrfResponse = await axios.get("/csrf");
+    const xcsrfToken = csrfResponse.data.csrfToken;
+    const config = {
+      headers: {
+        Authorization: `Token ${token}`,
+        "X-CSRF-Token": xcsrfToken,
+      },
+    };
     try{
    
-      await axios.post('/vehicles/', vehicleData)
+      await axios.post('/vehicles/', vehicleData, config)
       .then((response) => {
         console.log(response);
       })
@@ -91,9 +104,11 @@ const AddVehicle: React.FC = () => {
       });
     // Reset the vehicleData state
     setVehicleData({
-      make: "",
+      company: "",
       model: "",
       year: "",
+      charging_start_time: "",
+      charging_end_time: "",
     });
 
   } catch (error) {
@@ -115,8 +130,8 @@ const AddVehicle: React.FC = () => {
       <label className="text-zinc-800 text-left font-medium whitespace-nowrap max-md:max-w-full">Make: </label>
         <select
         className="text-slate-500 text-base whitespace-nowrap border justify-center mt-3 pl-5 pr-16 py-5 rounded-xl border-solid border-gray-400 items-start max-md:max-w-full max-md:pr-5"
-          name="make"
-          value={vehicleData.make}
+          name="company"
+          value={vehicleData.company}
           onChange={handleInputChange}
         >
           <option value="">Select Make</option>
@@ -127,7 +142,7 @@ const AddVehicle: React.FC = () => {
           ))}
         </select>
 </div>
-        {vehicleData.make && (
+        {vehicleData.company && (
             <div className="items-stretch border border-[color:var(--6,#F4F5F6)] shadow-2xl bg-white flex w-[506px] max-w-full flex-col mt-10 pl-5 pr-10 py-5 rounded-xl border-solid max-md:pr-5">
    
             <label className="text-zinc-800 text-left font-medium whitespace-nowrap max-md:max-w-full">Model: </label>
@@ -139,7 +154,7 @@ const AddVehicle: React.FC = () => {
             >
               <option value="">Select Model</option>
               {electricVehicleCompanies
-                .find((company) => company.name === vehicleData.make)
+                .find((company) => company.name === vehicleData.company)
                 ?.models.map((model) => (
                   <option key={model.name} value={model.name}>
                     {model.name}
@@ -160,7 +175,7 @@ const AddVehicle: React.FC = () => {
             >
               <option value="">Select Year</option>
               {electricVehicleCompanies
-                .find((company) => company.name === vehicleData.make)
+                .find((company) => company.name === vehicleData.company)
                 ?.models.find((model) => model.name === vehicleData.model)
                 ?.years.map((year) => (
                   <option key={year} value={year}>
@@ -170,6 +185,38 @@ const AddVehicle: React.FC = () => {
             </select>
           </div>
         )}
+          <div className="items-stretch border border-[color:var(--6,#F4F5F6)] shadow-2xl bg-white flex w-[506px] max-w-full flex-col mt-10 pl-5 pr-10 py-5 rounded-xl border-solid max-md:pr-5">
+            <label>Charging Start Time: </label>
+            <select
+              name="charging_start_time"
+              value={vehicleData.charging_start_time}
+              onChange={handleInputChange}
+              className="text-slate-500 text-base whitespace-nowrap border justify-center mt-3 pl-5 pr-16 py-5 rounded-xl border-solid border-gray-400 items-start max-md:max-w-full max-md:pr-5"
+            >
+                <option value="">Select Vehicle Charging Time</option>
+                <option value="08:00">08:00 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="04:00">04:00 PM</option>
+                <option value="08:00">08:00 PM</option>
+             
+            </select>
+          </div>
+          <div className="items-stretch border border-[color:var(--6,#F4F5F6)] shadow-2xl bg-white flex w-[506px] max-w-full flex-col mt-10 pl-5 pr-10 py-5 rounded-xl border-solid max-md:pr-5">
+            <label>Charging End Time Time: </label>
+            <select
+              name="charging_end_time"
+              value={vehicleData.charging_end_time}
+              onChange={handleInputChange}
+              className="text-slate-500 text-base whitespace-nowrap border justify-center mt-3 pl-5 pr-16 py-5 rounded-xl border-solid border-gray-400 items-start max-md:max-w-full max-md:pr-5"
+            >
+                <option value="">Select Vehicle Charging End Time</option>
+                <option value="08:00">08:00 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="04:00">04:00 PM</option>
+                <option value="08:00">08:00 PM</option>
+             
+            </select>
+          </div>
         <button
           className="flex-col text-stone-50 text-xl bg-purple font-bold relative whitespace-nowrap fill-purple-500 overflow-hidden min-h-[60px] w-[506px] max-w-full justify-center items-center mt-8 mb-20 px-16 py-5 max-md:mb-10 max-md:px-5"
         >

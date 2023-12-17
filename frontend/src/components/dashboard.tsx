@@ -49,15 +49,15 @@ const Dashboard: React.FC = () => {
        
           <SideNavBar />
 
-        <div className="flex flex-col items-stretch w-[81%] ml-5 my-5 pb-5 max-md:w-full max-md:ml-0">
-          <div className="w-[1016px] h-[266px] justify-start self-stretch items-start gap-[30px] inline-flex pb-10 mb-10">
+        <div className="flex flex-wrap flex-col items-stretch w-[81%] ml-5 my-5 pb-5 max-md:w-full max-md:ml-0">
+          <div className="w-[1016px] h-[606px] flex-wrap inline-flex justify-start self-stretch items-start gap-[30px] pb-10 mb-10">
             {vehicles.map((vehicle, index) => (
               <div
                 key={vehicle.id}
-                className="grow shrink basis-0 h-[266px] px-[60px] py-5 bg-white rounded-[14px] justify-center items-center gap-2.5 flex"
+                className=" flex-wrap basis-0 h-[266px] px-[60px] py-5 bg-white rounded-[14px] justify-center items-center gap-2.5 flex"
               >
                 <div className="flex-col justify-start items-center gap-[30px] inline-flex">
-                  <div className="flex-col justify-start items-center gap-2.5 flex">
+                  <div className="flex-wrap flex-col justify-start items-center gap-2.5 flex">
                     <div className="w-[38px] h-[38px] relative">
                       <img
                         loading="lazy"

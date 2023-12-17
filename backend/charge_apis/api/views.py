@@ -8,6 +8,7 @@ from .models import Vehicle
 from .serializers import VehicleSerializer, UserSerializer
 from rest_framework.authtoken.models import Token
 from django.middleware import csrf
+from rest_framework.authtoken.models import Token
 
 
 class CsrfView(APIView):
@@ -25,6 +26,10 @@ class VehicleListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        token_key = request.headers.get('Authorization').split(' ')[1]
+        token = Token.objects.get(key=token_key)
+        user = token.user
+        request.data['user'] = user.id  # Append the user in the request data
         serializer = VehicleSerializer(data=request.data)
         if serializer.is_valid():
             try:
@@ -33,6 +38,16 @@ class VehicleListCreateAPIView(APIView):
             except Exception as e:
                 return Response({'error': str(e)}, status=400)
         return Response(serializer.errors, status=400)
+
+class UserTokenAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        token_key = request.META.get('HTTP_AUTHORIZATION').split(' ')[1]
+        token = Token.objects.get(key)
+        user_id = token.user_id
+        return Response({'user_id': user_id}, status=200)
+
 
 class VehicleRetrieveUpdateDestroyAPIView(APIView):
     permission_classes = [AllowAny]
@@ -113,11 +128,9 @@ class UserLogoutAPIView(APIView):
 
 class UserVehiclesView(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         # Get the user token from headers
         token_key = request.headers.get('Authorization').split(' ')[1]
-       
         # Retrieve the user associated with the token
         try:
             token = Token.objects.get(key=token_key)
