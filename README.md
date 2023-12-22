@@ -2,10 +2,32 @@
 An app that allows users to track their EV batteries schedule
 
 clone this project
+`git clone https://github.com/Farjmand/charge-trace.git`
 Then `cd charge-trace`
-Then in one terminal add `cd frontend`
-and in the other terminal add `cd backend`
-and you will have the project running.
+Running the frontend:
+    In one terminal, add `cd frontend`
+    The run `npm i`
+Once all the dependencies are installed, run:
+`npm run dev`
+Then you will have the frontend running at: 
+`http://localhost:5173/`
+Running the backend:
+In a parellel terminal, add `cd backend`
+The run the python command to create a venv:
+`python3 -m venv venv` 
+once its done, activate venv by running this command:
+`source ./venv/bin/activate`
+Once the venv is activated, install the dependencies in the requirements file by running:
+`pip install -r requirements.txt`
+Once all the reauirements are installed, go to charge_apis folder:
+`cd charge_apis`
+The run migrations: 
+`python manage.py migrate`
+once all the migrations are done,
+Please run:
+`python manage.py runserver`
+and you will have the backend running at:
+`http://127.0.0.1:8000/`
 
 # APIS
 Currently the project has:
@@ -24,6 +46,21 @@ On the frontend we have:
 4. A form for adding new vehicles (API not working ... )
 5. A chart with hourly electric prices for 7 days so that the user can see the highs and lows of prices to select a `Smart Schedule `
 
+# Pages
+ Visit 
+ http://localhost:5173/login for the login form.
+ You can use already existing username and pas:
+ username: fawd
+ password: fawd12
+
+Or you can create a new user by visiting this page:
+http://localhost:5173/register
+
+Dashboard is on:
+http://localhost:5173/
+
+And you can add new vehicle at:
+http://localhost:5173/addVehicle
 # Scope
 Currently everything is manual. User can set their own time schedules for their car charging. But this can get more improved and with enhanced features. 
 We can generate a smart schedule for users by checking the electric prices or they can set a manual schedule by themselves.
